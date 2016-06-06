@@ -243,6 +243,139 @@
             
               
                 
+                <a class="post-title-link" href="/2016/06/06/sortlistbytime/" itemprop="url">
+                  listview item按时间项排序
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-06-06T23:29:46+08:00" content="2016-06-06">
+              2016-06-06
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/android/" itemprop="url" rel="index">
+                    <span itemprop="name">android</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/06/06/sortlistbytime/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2016/06/06/sortlistbytime/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>如题，废话少说，直接代码。</p>
+<p>1.DateUtil</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">public class DateUtil &#123;</span><br><span class="line"></span><br><span class="line">    public static  Date stringToDate(String dateString)&#123;</span><br><span class="line">        ParsePosition position = new ParsePosition(0);</span><br><span class="line">        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(&quot;yyyy-MM-dd HH:mm&quot;);</span><br><span class="line">        Date dateValue = simpleDateFormat.parse(dateString, position);</span><br><span class="line">        return dateValue;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2.MainActivity</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">public class MainActivity extends Activity &#123;</span><br><span class="line">    private ListView mListView = null;</span><br><span class="line">    private List&lt;TestDate&gt; mList = null;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    protected void onCreate(Bundle savedInstanceState) &#123;</span><br><span class="line">        super.onCreate(savedInstanceState);</span><br><span class="line">        setContentView(R.layout.activity_main);</span><br><span class="line">        mListView = (ListView) this.findViewById(R.id.main_listView);</span><br><span class="line">        mList = new ArrayList&lt;TestDate&gt;();</span><br><span class="line">        initData();</span><br><span class="line">        Collections.sort(mList, new Comparator&lt;TestDate&gt;() &#123;</span><br><span class="line">            @Override</span><br><span class="line">            public int compare(TestDate lhs, TestDate rhs) &#123;</span><br><span class="line">                Date date1 = DateUtil.stringToDate(lhs.getDate());</span><br><span class="line">                Date date2 = DateUtil.stringToDate(rhs.getDate());</span><br><span class="line">                if(date1.before(date2))&#123;</span><br><span class="line">                    return 1;</span><br><span class="line">                &#125;</span><br><span class="line">                return -1;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line">        mListView.setAdapter(new MyAdapter(this, mList));</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private void initData()&#123;</span><br><span class="line">        mList.add(new TestDate(&quot;2012-12-12 12:30&quot;, &quot;zhangsan&quot;));</span><br><span class="line">        mList.add(new TestDate(&quot;2012-12-12 10:20&quot;, &quot;lishi&quot;));</span><br><span class="line">        mList.add(new TestDate(&quot;2012-12-11 10:22&quot;, &quot;lishi&quot;));</span><br><span class="line">        mList.add(new TestDate(&quot;2014-02-11 10:24&quot;, &quot;lishi&quot;));</span><br><span class="line">        mList.add(new TestDate(&quot;2012-09-13 01:22&quot;, &quot;wagnwu&quot;));</span><br><span class="line">        mList.add(new TestDate(&quot;2012-12-10 02:22&quot;, &quot;zhaoliu&quot;));</span><br><span class="line">        mList.add(new TestDate(&quot;2013-12-11 12:22&quot;, &quot;wango&quot;));</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>3.MyAdapter</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line">public class MyAdapter extends BaseAdapter &#123;</span><br><span class="line"></span><br><span class="line">    private Context mContext;</span><br><span class="line">    private List&lt;TestDate&gt; mList;</span><br><span class="line"></span><br><span class="line">    public MyAdapter(Context context, List&lt;TestDate&gt; list)&#123;</span><br><span class="line">        this.mContext = context;</span><br><span class="line">        this.mList = list;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">    @Override</span><br><span class="line">    public int getCount() &#123;</span><br><span class="line">        return mList != null ? mList.size() : 0;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public Object getItem(int position) &#123;</span><br><span class="line">        return mList.get(position);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public long getItemId(int position) &#123;</span><br><span class="line">        return position;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public View getView(int position, View convertView, ViewGroup parent) &#123;</span><br><span class="line">        ViewHolder holder = null;</span><br><span class="line">        if (convertView == null) &#123;</span><br><span class="line">            convertView = (LinearLayout) LayoutInflater.from(mContext).inflate(</span><br><span class="line">                    R.layout.main_item, null);</span><br><span class="line">            holder = new ViewHolder();</span><br><span class="line">            holder.textView1 = (TextView) convertView.findViewById(R.id.item_textView1);</span><br><span class="line">            holder.textVeiw2 = (TextView) convertView.findViewById(R.id.item_textView2);</span><br><span class="line">            convertView.setTag(holder);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            holder = (ViewHolder) convertView.getTag();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        holder.textView1.setText(mList.get(position).getDate());</span><br><span class="line">        holder.textVeiw2.setText(mList.get(position).getName());</span><br><span class="line"></span><br><span class="line">        return convertView;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private class ViewHolder &#123;</span><br><span class="line">        private TextView textView1;</span><br><span class="line">        private TextView textVeiw2;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>4.TestDate</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public class TestDate &#123;</span><br><span class="line"></span><br><span class="line">    private String date;</span><br><span class="line">    private String name;</span><br><span class="line"></span><br><span class="line">    public String getDate() &#123;</span><br><span class="line">        return date;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public TestDate(String date, String name) &#123;</span><br><span class="line">        this.date = date;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>5.activity_main.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">    xmlns:tools=&quot;http://schemas.android.com/tools&quot;</span><br><span class="line">    android:layout_width=&quot;match_parent&quot;</span><br><span class="line">    android:layout_height=&quot;match_parent&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;ListView</span><br><span class="line">        android:id=&quot;@+id/main_listView&quot;</span><br><span class="line">        android:layout_width=&quot;match_parent&quot;</span><br><span class="line">        android:layout_height=&quot;match_parent&quot;</span><br><span class="line">        android:layout_centerHorizontal=&quot;true&quot;</span><br><span class="line">        android:layout_centerVertical=&quot;true&quot;</span><br><span class="line">        tools:context=&quot;.MainActivity&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;/RelativeLayout&gt;</span><br></pre></td></tr></table></figure>
+<p>6.main_item.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line">&lt;LinearLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;</span><br><span class="line">    android:layout_width=&quot;match_parent&quot;</span><br><span class="line">    android:layout_height=&quot;match_parent&quot;</span><br><span class="line">    android:orientation=&quot;horizontal&quot;&gt;</span><br><span class="line"></span><br><span class="line">    &lt;TextView</span><br><span class="line">        android:id=&quot;@+id/item_textView1&quot;</span><br><span class="line">        android:layout_width=&quot;wrap_content&quot;</span><br><span class="line">        android:layout_height=&quot;wrap_content&quot;</span><br><span class="line">        android:layout_gravity=&quot;center_vertical&quot;</span><br><span class="line">        android:layout_margin=&quot;10dp&quot; /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;TextView</span><br><span class="line">        android:id=&quot;@+id/item_textView2&quot;</span><br><span class="line">        android:layout_width=&quot;wrap_content&quot;</span><br><span class="line">        android:layout_height=&quot;wrap_content&quot;</span><br><span class="line">        android:layout_gravity=&quot;center_vertical&quot; /&gt;</span><br><span class="line"></span><br><span class="line">&lt;/LinearLayout&gt;</span><br></pre></td></tr></table></figure>
+<p>以上，gameover :)</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/05/28/androidview2/" itemprop="url">
                   android view工作原理2
                 </a>
@@ -1055,7 +1188,7 @@ audioPlayer.resume()
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">6</span>
+              <span class="site-state-item-count">7</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
